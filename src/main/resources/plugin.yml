@@ -1,0 +1,8 @@
+name: PartyGames
+version: 1.0
+author: DevNyTake
+main: de.devnytake.skrimeparty.PartyGames
+
+commands:
+  setup:
+  spielmodi:

@@ -1,0 +1,12 @@
+text:
+  prefix: '&7[&9SkrimeParty&7] '
+  noPerm: '&cDazu hast du keine Rechte!'
+
+#Die permissions sind nicht aenderbar
+permissions:
+  setupCommand: 'SkrimeParty.commands.setup'
+  spielmodiCommand: 'SkrimeParty.commands.spielmodi'
+lobbyphase:
+  minPlayers: 1
+  maxPlayers: 16
+  seconds: 30
