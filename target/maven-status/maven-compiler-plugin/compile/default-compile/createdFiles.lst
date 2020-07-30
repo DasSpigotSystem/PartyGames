@@ -9,12 +9,10 @@ de\devnytake\skrimeparty\games\tntrun\TNTRun$1.class
 de\devnytake\skrimeparty\games\tntrun\TNTRun.class
 de\devnytake\skrimeparty\gamestates\countdown\LobbyCountdown$1.class
 de\devnytake\skrimeparty\util\items\ItemManager.class
-de\devnytake\skrimeparty\commands\SetupCommand.class
 de\devnytake\skrimeparty\map\Voting.class
 de\devnytake\skrimeparty\gamestates\countdown\LobbyCountdown.class
 de\devnytake\skrimeparty\PartyGames.class
 de\devnytake\skrimeparty\gamestates\countdown\LobbyCountdown$2.class
-de\devnytake\skrimeparty\listener\PlayerConnectionListener.class
 de\devnytake\skrimeparty\commands\SpielmodiCommand.class
 de\devnytake\skrimeparty\util\GameUtil.class
 de\devnytake\skrimeparty\games\Games.class
