@@ -7,7 +7,7 @@ package de.devnytake.skrimeparty.gamestates;
 
 public enum GameState {
 
-    LOBBY, TNTRUN, INGAME;
+    LOBBY, TNTRUN;
 
     public static GameState gameState;
 
