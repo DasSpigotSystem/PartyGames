@@ -4,6 +4,7 @@ import de.devnytake.skrimeparty.commands.SetupCommand;
 import de.devnytake.skrimeparty.commands.SpielmodiCommand;
 import de.devnytake.skrimeparty.games.Games;
 import de.devnytake.skrimeparty.gamestates.GameState;
+import de.devnytake.skrimeparty.gamestates.countdown.InGameCountdown;
 import de.devnytake.skrimeparty.gamestates.countdown.LobbyCountdown;
 import de.devnytake.skrimeparty.listener.PlayerConnectionListener;
 import de.devnytake.skrimeparty.listener.VotingItemListener;
@@ -103,7 +104,7 @@ public class PartyGames extends JavaPlugin {
         MySQL.PORT = getConfig().getString("mysql.port");
 
         getConfig().options().copyDefaults(true);
-        saveConfig();
+        saveDefaultConfig();
     }
 
     private void sendConsoleMessage(String message){

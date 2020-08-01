@@ -15,6 +15,8 @@ public class LobbyCountdown extends Countdown{
 
     private PartyGames plugin;
 
+    private InGameCountdown inGameCountdown;
+
     private int seconds;
     private boolean isRunning;
 
@@ -24,7 +26,6 @@ public class LobbyCountdown extends Countdown{
         seconds = plugin.getConfig().getInt("lobbyphase.seconds");
     }
 
-    @Override
     public void start() {
         isRunning = true;
         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
@@ -44,10 +45,12 @@ public class LobbyCountdown extends Countdown{
                         Bukkit.broadcastMessage(plugin.getPrefix() + "§7Das Spiel startet in §aeiner §7Sekunde");
                         break;
                     case 0:
-                        GameState.setGameState(GameState.INGAME);
                         for(Player player : plugin.getPlayers()){
                             teleportToGame(player);
                         }
+                        inGameCountdown = new InGameCountdown(plugin);
+                        inGameCountdown.start();
+                        Bukkit.getScheduler().cancelTask(taskID);
                         break;
                 }
                 seconds--;
@@ -55,7 +58,6 @@ public class LobbyCountdown extends Countdown{
         }, 20, 20);
     }
 
-    @Override
     public void stop() {
         if (isRunning){
             isRunning = false;

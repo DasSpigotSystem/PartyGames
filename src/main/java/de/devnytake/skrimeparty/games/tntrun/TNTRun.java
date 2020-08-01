@@ -29,17 +29,40 @@ public class TNTRun implements GameUtil {
 
     private int taskID;
     private int updateID;
+    private int idleID;
+
+    private boolean isRunning;
 
     public TNTRun(PartyGames plugin){
+        this.plugin = plugin;
+
         tntRunPlayers = new ArrayList<Player>();
         seconds = 0;
 
         tntRunPlayers.addAll(plugin.getPlayers());
         boards = new HashMap<Scoreboard, Player>();
+    }
 
-        taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+    public void startIdle(final Player player){
+        isRunning = false;
+        idleID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+            int idleSeconds = 10;
             public void run() {
-                seconds++;
+                switch (idleSeconds){
+                    case 10: case 5: case 4: case 3: case 2:
+                        Bukkit.broadcastMessage(plugin.getPrefix() + "§7Die Schutzzeit endet in §a" + idleSeconds + " §7Sekunden");
+                        break;
+                    case 1:
+                        Bukkit.broadcastMessage(plugin.getPrefix() + "§7Die Schutzzeit endet in §aeiner §7Sekunde");
+                        break;
+                    case 0:
+                        startCountdown();
+                        createScoreboard(player);
+                        createStartInventory(player);
+                        updateScoreboard();
+                        break;
+                }
+                idleSeconds--;
             }
         }, 20, 20);
     }
@@ -63,8 +86,8 @@ public class TNTRun implements GameUtil {
         players.addEntry(ChatColor.BLACK.toString());
         time.addEntry(ChatColor.RED.toString());
 
-        DateFormat df = new SimpleDateFormat("HH:mm:ss");
-        Date d = new Date( (seconds*60*60*1000));
+        DateFormat df = new SimpleDateFormat("mm:ss");
+        Date d = new Date( (seconds*1000));
 
         players.setPrefix("§8» §a" + tntRunPlayers.size());
         time.setPrefix("§8» §a" + df.format(d));
@@ -76,7 +99,7 @@ public class TNTRun implements GameUtil {
         obj.getScore("§8• §7Spieler").setScore(5);
         obj.getScore(ChatColor.BLACK.toString()).setScore(4);
         obj.getScore(" ").setScore(3);
-        obj.getScore("8• §7Spielzeit").setScore(2);
+        obj.getScore("§8• §7Spielzeit").setScore(2);
         obj.getScore(ChatColor.RED.toString()).setScore(1);
         obj.getScore("  ").setScore(0);
 
@@ -88,12 +111,31 @@ public class TNTRun implements GameUtil {
         updateID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             public void run() {
                 for(Scoreboard boards : boards.keySet()){
-                    DateFormat df = new SimpleDateFormat("HH:mm:ss");
-                    Date d = new Date( (seconds*60*60*1000));
+                    DateFormat df = new SimpleDateFormat("mm:ss");
+                    Date d = new Date( (seconds*1000));
                     boards.getTeam("time").setPrefix("§8» §a" + df.format(d));
                     boards.getTeam("players").setPrefix("§8» §a" + tntRunPlayers.size());
                 }
             }
         }, 20, 20);
     }
+
+    private void startCountdown(){
+        isRunning = true;
+        taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+            public void run() {
+                seconds++;
+            }
+        }, 20, 20);
+    }
+
+    public void cancleScheduler(){
+        Bukkit.getScheduler().cancelTask(taskID);
+        Bukkit.getScheduler().cancelTask(updateID);
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
 }
