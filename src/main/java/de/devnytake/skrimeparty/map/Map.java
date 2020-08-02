@@ -21,7 +21,7 @@ public class Map {
     private String name;
     private String spielModi;
     private String builder;
-    private Location spawnLocation;
+    private Location spawnLocation, highLocation;
 
     public Map(String spielModi, String name) {
         this.name = name;
@@ -46,6 +46,11 @@ public class Map {
     public void setSpawn(Location location) {
         spawnLocation = location;
         new LocationUtil(location, spielModi + "." + "Maps." + name + ".Spawn").saveLocation();
+    }
+
+    public void setHigh(Location location){
+        highLocation = location;
+        new LocationUtil(location, spielModi + "." + "Maps." + name + ".High").saveLocation();
     }
 
     private void saveConfig() {
