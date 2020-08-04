@@ -11,7 +11,9 @@ import de.devnytake.skrimeparty.listener.VotingItemListener;
 import de.devnytake.skrimeparty.map.Map;
 import de.devnytake.skrimeparty.map.Voting;
 import de.devnytake.skrimeparty.mysql.MySQL;
+import de.devnytake.skrimeparty.util.LocationUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,15 +48,19 @@ public class PartyGames extends JavaPlugin {
         loadConfig();
         initSpielmodi();
 
-        GameState.setGameState(GameState.LOBBY);
-        lobbyCountdown.startIdle();
 
-        sendConsoleMessage("§7_____________[§c" + getDescription().getName() + "§7]_____________");
-        sendConsoleMessage("");
-        sendConsoleMessage("§bDeveloper: " + getDescription().getAuthors().get(0));
-        sendConsoleMessage("§eVersion: " + getDescription().getVersion());
-        sendConsoleMessage("");
-        sendConsoleMessage("§7_____________[§c" + getDescription().getName() + "§7]_____________");
+        Location lobbyLocation = new LocationUtil("Lobby").loadLocation();
+        if(lobbyLocation != null) {
+            GameState.setGameState(GameState.LOBBY);
+            lobbyCountdown.startIdle();
+            sendConsoleMessage("§7_____________[§c" + getDescription().getName() + "§7]_____________");
+            sendConsoleMessage("");
+            sendConsoleMessage("§bDeveloper: " + getDescription().getAuthors().get(0));
+            sendConsoleMessage("§eVersion: " + getDescription().getVersion());
+            sendConsoleMessage("");
+            sendConsoleMessage("§7_____________[§c" + getDescription().getName() + "§7]_____________");
+        }else
+            Bukkit.getConsoleSender().sendMessage("§cDie Lobby wurde noch nicht gesetzt!");
     }
 
     @Override

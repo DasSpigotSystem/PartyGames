@@ -24,9 +24,9 @@ public class PlayerMoveListener implements Listener {
     private PartyGames plugin;
     private TNTRun tntRun;
 
-    private List<Block> gravelBlocks;
-    private List<Block> sandBlocks;
-    private List<Block> tntBlocks;
+    private static List<Block> gravelBlocks;
+    private static List<Block> sandBlocks;
+    private static List<Block> tntBlocks;
 
     private int taskID;
 
@@ -63,7 +63,7 @@ public class PlayerMoveListener implements Listener {
         }
     }
 
-    public void reset(){
+    public static void reset(){
         for(Block block : tntBlocks){
             block.setType(Material.TNT);
             block.getWorld().getBlockAt(block.getLocation());

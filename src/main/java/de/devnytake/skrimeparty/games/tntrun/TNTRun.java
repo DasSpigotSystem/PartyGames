@@ -1,10 +1,14 @@
 package de.devnytake.skrimeparty.games.tntrun;
 
 import de.devnytake.skrimeparty.PartyGames;
+import de.devnytake.skrimeparty.games.tntrun.listener.PlayerMoveListener;
+import de.devnytake.skrimeparty.gamestates.GameState;
 import de.devnytake.skrimeparty.util.GameUtil;
+import de.devnytake.skrimeparty.util.LocationUtil;
 import de.devnytake.skrimeparty.util.items.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -25,6 +29,7 @@ public class TNTRun implements GameUtil {
 
     private HashMap<Scoreboard, Player> boards;
     private List<Player> tntRunPlayers;
+
     private int seconds;
 
     private int taskID;
@@ -65,6 +70,32 @@ public class TNTRun implements GameUtil {
                 idleSeconds--;
             }
         }, 20, 20);
+    }
+
+    public void check(){
+        if(tntRunPlayers.size() <= 1) {
+            Player wonPlayer = (Player) tntRunPlayers;
+            cancleScheduler();
+            sendWinnerMessage(wonPlayer);
+
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+                int idleSeconds = 3;
+                public void run() {
+                    if(idleSeconds == 0){
+                        Location lobbyLocation = new LocationUtil("Lobby").loadLocation();
+                        for(Player player : Bukkit.getOnlinePlayers()) {
+                            player.teleport(lobbyLocation);
+                            plugin.getPlayers().clear();
+                            if(player != null)
+                                plugin.getPlayers().add(player);
+                        }
+                        GameState.setGameState(GameState.LOBBY);
+                        PlayerMoveListener.reset();
+                    }
+                    idleSeconds--;
+                }
+            }, 20, 20);
+        }
     }
 
     public void createStartInventory(Player p) {
@@ -132,6 +163,15 @@ public class TNTRun implements GameUtil {
     public void cancleScheduler(){
         Bukkit.getScheduler().cancelTask(taskID);
         Bukkit.getScheduler().cancelTask(updateID);
+    }
+
+    private void sendWinnerMessage(Player wonPlayer){
+
+        //TODO: Spielzeit eintragen, winner
+
+        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage("");
     }
 
     public boolean isRunning() {
