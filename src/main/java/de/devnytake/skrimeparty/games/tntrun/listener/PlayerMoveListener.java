@@ -32,16 +32,17 @@ public class PlayerMoveListener implements Listener {
 
     public PlayerMoveListener(PartyGames plugin) {
         this.plugin = plugin;
+        Bukkit.getPluginManager().registerEvents(this, plugin);
 
         gravelBlocks = new ArrayList<Block>();
         sandBlocks = new ArrayList<Block>();
         tntBlocks = new ArrayList<Block>();
-        tntRun = new TNTRun(plugin);
     }
 
     @EventHandler
     public void onMove(final PlayerMoveEvent e){
         if(GameState.getCurrentGameState() != GameState.TNTRUN)return;
+        tntRun = new TNTRun(plugin);
         if(!tntRun.isRunning())return;
 
         final Player p = e.getPlayer();
@@ -61,6 +62,7 @@ public class PlayerMoveListener implements Listener {
                 }
             }, 8);
         }
+        tntRun.check();
     }
 
     public static void reset(){

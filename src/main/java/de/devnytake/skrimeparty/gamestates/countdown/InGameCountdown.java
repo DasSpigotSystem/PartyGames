@@ -25,6 +25,7 @@ public class InGameCountdown extends Countdown{
         voting = plugin.getVoting();
     }
 
+    @Override
     public void start() {
         winnerGame = voting.getWinnerGame();
         //if TNTRun is playing
@@ -36,7 +37,7 @@ public class InGameCountdown extends Countdown{
         }
     }
 
-
+    @Override
     public void stop() {
 
     }

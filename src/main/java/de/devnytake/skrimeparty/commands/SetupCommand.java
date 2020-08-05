@@ -34,7 +34,7 @@ public class SetupCommand implements CommandExecutor {
             if(args.length == 0){
                 p.sendMessage("---------§9Setup-----------");
                 p.sendMessage("");
-                p.sendMessage("§9/setup §esetspawn");
+                p.sendMessage("§9/setup §esetlobby");
                 p.sendMessage("§9/setup §ecreate §7<SpielModi> <Map-Name> <Builder>");
                 p.sendMessage("§9/setup §esetspawn §7<SpielModi> <Map-Name>");
                 p.sendMessage("");
@@ -50,8 +50,8 @@ public class SetupCommand implements CommandExecutor {
                     if (map.exists()) {
                         map.setSpawn(p.getLocation());
                     }
-                }else if(args[0].equalsIgnoreCase("setspawn")){
-                    new LocationUtil(p.getLocation(), "Lobby");
+                }else if(args[0].equalsIgnoreCase("setlobby")){
+                    new LocationUtil(p.getLocation(), "Lobby").saveLocation();
                 }
             }
         } else

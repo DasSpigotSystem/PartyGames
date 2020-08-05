@@ -6,10 +6,7 @@ import de.devnytake.skrimeparty.gamestates.GameState;
 import de.devnytake.skrimeparty.util.GameUtil;
 import de.devnytake.skrimeparty.util.LocationUtil;
 import de.devnytake.skrimeparty.util.items.ItemManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -65,6 +62,7 @@ public class TNTRun implements GameUtil {
                         createScoreboard(player);
                         createStartInventory(player);
                         updateScoreboard();
+                        check();
                         break;
                 }
                 idleSeconds--;
@@ -74,22 +72,34 @@ public class TNTRun implements GameUtil {
 
     public void check(){
         if(tntRunPlayers.size() <= 1) {
-            Player wonPlayer = (Player) tntRunPlayers;
+            for(int i = 0; i < tntRunPlayers.size(); i++){
+                Player wonPlayer = tntRunPlayers.get(i);
+                sendWinnerMessage(wonPlayer);
+            }
             cancleScheduler();
-            sendWinnerMessage(wonPlayer);
+            Bukkit.getOnlinePlayers().forEach(player ->{
+                player.setGameMode(GameMode.SPECTATOR);
+            });
 
             Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
-                int idleSeconds = 3;
+                int idleSeconds = 5;
                 public void run() {
                     if(idleSeconds == 0){
                         Location lobbyLocation = new LocationUtil("Lobby").loadLocation();
                         for(Player player : Bukkit.getOnlinePlayers()) {
                             player.teleport(lobbyLocation);
+                            player.setGameMode(GameMode.SURVIVAL);
                             plugin.getPlayers().clear();
                             if(player != null)
                                 plugin.getPlayers().add(player);
                         }
                         GameState.setGameState(GameState.LOBBY);
+                        if(plugin.getPlayers().size() >= plugin.getMinPlayers()){
+                            if(!plugin.getLobbyCountdown().isRunning()){
+                                plugin.getLobbyCountdown().start();
+                            }
+                        }else
+                            plugin.getLobbyCountdown().startIdle();
                         PlayerMoveListener.reset();
                     }
                     idleSeconds--;
@@ -168,10 +178,15 @@ public class TNTRun implements GameUtil {
     private void sendWinnerMessage(Player wonPlayer){
 
         //TODO: Spielzeit eintragen, winner
+        DateFormat df = new SimpleDateFormat("mm:ss");
+        Date d = new Date( (seconds*1000));
 
+        Bukkit.broadcastMessage("       §4TNTRun        ");
         Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage("§7Gewonnen: §a" + wonPlayer.getName());
+        Bukkit.broadcastMessage("§7Spielzeit: §c" + df.format(d));
         Bukkit.broadcastMessage("");
-        Bukkit.broadcastMessage("");
+        Bukkit.broadcastMessage("       §4TNTRun        ");
     }
 
     public boolean isRunning() {

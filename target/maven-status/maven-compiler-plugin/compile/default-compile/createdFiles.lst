@@ -17,8 +17,10 @@ de\devnytake\skrimeparty\map\Map.class
 de\devnytake\skrimeparty\games\tntrun\TNTRun.class
 de\devnytake\skrimeparty\gamestates\countdown\LobbyCountdown$1.class
 de\devnytake\skrimeparty\util\items\ItemManager.class
+de\devnytake\skrimeparty\games\tntrun\listener\PlayerMoveListener$1.class
 de\devnytake\skrimeparty\commands\SetupCommand.class
 de\devnytake\skrimeparty\map\Voting.class
 de\devnytake\skrimeparty\gamestates\countdown\LobbyCountdown.class
+de\devnytake\skrimeparty\games\tntrun\TNTRun$4.class
 de\devnytake\skrimeparty\util\GameUtil.class
 de\devnytake\skrimeparty\mysql\MySQL.class

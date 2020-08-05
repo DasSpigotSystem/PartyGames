@@ -3,6 +3,7 @@ package de.devnytake.skrimeparty;
 import de.devnytake.skrimeparty.commands.SetupCommand;
 import de.devnytake.skrimeparty.commands.SpielmodiCommand;
 import de.devnytake.skrimeparty.games.Games;
+import de.devnytake.skrimeparty.games.tntrun.listener.PlayerMoveListener;
 import de.devnytake.skrimeparty.gamestates.GameState;
 import de.devnytake.skrimeparty.gamestates.countdown.InGameCountdown;
 import de.devnytake.skrimeparty.gamestates.countdown.LobbyCountdown;
@@ -73,6 +74,7 @@ public class PartyGames extends JavaPlugin {
         //Listener
         new PlayerConnectionListener(this);
         new VotingItemListener(this);
+        new PlayerMoveListener(this);
 
         //Commands
         new SetupCommand(this);
