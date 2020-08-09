@@ -5,7 +5,7 @@ import de.devnytake.skrimeparty.games.tntrun.listener.PlayerMoveListener;
 import de.devnytake.skrimeparty.gamestates.GameState;
 import de.devnytake.skrimeparty.util.GameUtil;
 import de.devnytake.skrimeparty.util.LocationUtil;
-import de.devnytake.skrimeparty.util.items.ItemManager;
+import de.devnytake.skrimeparty.util.items.Items;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -33,20 +33,17 @@ public class TNTRun implements GameUtil {
     private int updateID;
     private int idleID;
 
-    private boolean isRunning;
 
     public TNTRun(PartyGames plugin){
         this.plugin = plugin;
 
         tntRunPlayers = new ArrayList<Player>();
         seconds = 0;
-
-        tntRunPlayers.addAll(plugin.getPlayers());
         boards = new HashMap<Scoreboard, Player>();
     }
 
     public void startIdle(final Player player){
-        isRunning = false;
+        tntRunPlayers.addAll(plugin.getPlayers());
         idleID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             int idleSeconds = 10;
             public void run() {
@@ -58,11 +55,12 @@ public class TNTRun implements GameUtil {
                         Bukkit.broadcastMessage(plugin.getPrefix() + "§7Die Schutzzeit endet in §aeiner §7Sekunde");
                         break;
                     case 0:
+                        PlayerMoveListener.isRunning = true;
                         startCountdown();
                         createScoreboard(player);
                         createStartInventory(player);
                         updateScoreboard();
-                        check();
+                        Bukkit.getScheduler().cancelTask(idleID);
                         break;
                 }
                 idleSeconds--;
@@ -77,6 +75,7 @@ public class TNTRun implements GameUtil {
                 sendWinnerMessage(wonPlayer);
             }
             cancleScheduler();
+            PlayerMoveListener.isRunning = false;
             Bukkit.getOnlinePlayers().forEach(player ->{
                 player.setGameMode(GameMode.SPECTATOR);
             });
@@ -86,13 +85,14 @@ public class TNTRun implements GameUtil {
                 public void run() {
                     if(idleSeconds == 0){
                         Location lobbyLocation = new LocationUtil("Lobby").loadLocation();
-                        for(Player player : Bukkit.getOnlinePlayers()) {
+                        Bukkit.getOnlinePlayers().forEach(player -> {
                             player.teleport(lobbyLocation);
                             player.setGameMode(GameMode.SURVIVAL);
                             plugin.getPlayers().clear();
-                            if(player != null)
-                                plugin.getPlayers().add(player);
-                        }
+                            plugin.getPlayers().add(player);
+                            player.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+                            Items.load(player);
+                        });
                         GameState.setGameState(GameState.LOBBY);
                         if(plugin.getPlayers().size() >= plugin.getMinPlayers()){
                             if(!plugin.getLobbyCountdown().isRunning()){
@@ -111,8 +111,7 @@ public class TNTRun implements GameUtil {
     public void createStartInventory(Player p) {
         p.getInventory().clear();
 
-        p.getInventory().setItem(8, new ItemManager(Material.BED).displayname("§8• §cZurück zur Lobby").create());
-        p.getInventory().setItem(0, new ItemManager(Material.CARROT).displayname("§8• Speedboost").create());
+        p.getInventory().setItem(8, Items.backToLobby);
     }
 
     public void createScoreboard(Player p) {
@@ -162,7 +161,6 @@ public class TNTRun implements GameUtil {
     }
 
     private void startCountdown(){
-        isRunning = true;
         taskID = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
             public void run() {
                 seconds++;
@@ -177,7 +175,6 @@ public class TNTRun implements GameUtil {
 
     private void sendWinnerMessage(Player wonPlayer){
 
-        //TODO: Spielzeit eintragen, winner
         DateFormat df = new SimpleDateFormat("mm:ss");
         Date d = new Date( (seconds*1000));
 
@@ -188,9 +185,4 @@ public class TNTRun implements GameUtil {
         Bukkit.broadcastMessage("");
         Bukkit.broadcastMessage("       §4TNTRun        ");
     }
-
-    public boolean isRunning() {
-        return isRunning;
-    }
-
 }

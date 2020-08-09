@@ -5,24 +5,18 @@ import de.devnytake.skrimeparty.commands.SpielmodiCommand;
 import de.devnytake.skrimeparty.games.Games;
 import de.devnytake.skrimeparty.games.tntrun.listener.PlayerMoveListener;
 import de.devnytake.skrimeparty.gamestates.GameState;
-import de.devnytake.skrimeparty.gamestates.countdown.InGameCountdown;
 import de.devnytake.skrimeparty.gamestates.countdown.LobbyCountdown;
 import de.devnytake.skrimeparty.listener.PlayerConnectionListener;
 import de.devnytake.skrimeparty.listener.VotingItemListener;
-import de.devnytake.skrimeparty.map.Map;
 import de.devnytake.skrimeparty.map.Voting;
 import de.devnytake.skrimeparty.mysql.MySQL;
 import de.devnytake.skrimeparty.util.LocationUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,9 +30,6 @@ public class PartyGames extends JavaPlugin {
     private LobbyCountdown lobbyCountdown;
     private Voting voting;
 
-    private File file;
-    private YamlConfiguration cfg;
-
     private ArrayList<Games> spielModi;
     private List<Player> players;
     private int minPlayers, maxPlayers;
@@ -48,7 +39,6 @@ public class PartyGames extends JavaPlugin {
         init();
         loadConfig();
         initSpielmodi();
-
 
         Location lobbyLocation = new LocationUtil("Lobby").loadLocation();
         if(lobbyLocation != null) {
@@ -84,13 +74,10 @@ public class PartyGames extends JavaPlugin {
         instance = this;
         lobbyCountdown = new LobbyCountdown(this);
 
-        spielModi = new ArrayList<Games>();
-        players = new ArrayList<Player>();
+        spielModi = new ArrayList<>();
+        players = new ArrayList<>();
         minPlayers = getConfig().getInt("lobbyphase.minPlayers");
         maxPlayers = getConfig().getInt("lobbyphase.maxPlayers");
-
-        file = new File("plugins//PartyGames", "maps.yml");
-        cfg = YamlConfiguration.loadConfiguration(file);
     }
 
     private void initSpielmodi(){
@@ -149,14 +136,6 @@ public class PartyGames extends JavaPlugin {
 
     public List<Player> getPlayers() {
         return players;
-    }
-
-    public YamlConfiguration getCfg() {
-        return cfg;
-    }
-
-    public void saveCfg() throws IOException {
-        cfg.save(file);
     }
 
     public Voting getVoting() {

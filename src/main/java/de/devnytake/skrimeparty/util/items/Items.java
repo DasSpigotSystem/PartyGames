@@ -11,10 +11,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class Items {
 
-    public static ItemStack voting;
+    public static ItemStack voting, backToLobby;
 
     static {
         voting = new ItemManager(Material.CHEST).displayname("§8• §6Voting").create();
+        backToLobby = new ItemManager(Material.BED).displayname("§8• §cZurück zur Lobby").create();
     }
 
     public static void load(Player player){

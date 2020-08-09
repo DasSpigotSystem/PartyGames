@@ -50,7 +50,7 @@ public class LobbyCountdown extends Countdown{
                         }
                         inGameCountdown = new InGameCountdown(plugin);
                         inGameCountdown.start();
-                        Bukkit.getScheduler().cancelTask(taskID);
+                        stop();
                         break;
                 }
                 seconds--;

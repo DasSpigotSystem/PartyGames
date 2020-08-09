@@ -4,7 +4,6 @@ package de.devnytake.skrimeparty.listener;
 import de.devnytake.skrimeparty.PartyGames;
 import de.devnytake.skrimeparty.gamestates.GameState;
 import de.devnytake.skrimeparty.gamestates.countdown.LobbyCountdown;
-import de.devnytake.skrimeparty.map.Map;
 import de.devnytake.skrimeparty.map.Voting;
 import de.devnytake.skrimeparty.util.items.Items;
 import org.bukkit.Bukkit;

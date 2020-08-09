@@ -8,7 +8,8 @@ package de.devnytake.skrimeparty.games;
 
 public enum Games {
 
-    TNTRUN("TNTRun", 0), AMPELRENNEN("Ampelrennen", 0), JUMPANDRUN("Jump and Run", 0);
+    TNTRUN("TNTRun", 0), AMPELRENNEN("Ampelrennen", 0), JUMPANDRUN("Jump and Run", 0),
+    HEIßEKARTOFFEL("Heißekartoffel", 0);
 
     Games(String name, int votes){
         this.name = name;
