@@ -30,7 +30,6 @@ public class Voting {
         this.plugin = plugin;
         this.spielModi = spielModi;
 
-        config = plugin.getCfg();
         votingGames = new Games[3];
         playerVotetForGame = new HashMap<Player, Games>();
         votet = new ArrayList<Player>();
